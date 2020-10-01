@@ -2,12 +2,14 @@ import random
 import pygame
 import sys
 
+
 # global variables
 WIDTH = 24
 HEIGHT = 24
 SIZE = 20
 SCREEN_WIDTH = WIDTH * SIZE
 SCREEN_HEIGHT = HEIGHT * SIZE
+white = (255, 255, 255)
 
 DIR = {
     'u' : (0, -1), # north is -y
@@ -36,18 +38,36 @@ class Snake(object):
 
     def turn(self, dir):
         # TODO: See section 3, "Turning the snake".
+        self.direction = dir
         pass
 
     def collision(self, x, y):
         # TODO: See section 2, "Collisions", and section 4, "Self Collisions"
+        if x < 0 or x > WIDTH:
+            return True
+        elif y < 0 or y > HEIGHT:
+             return True
+        for i in range(1, len(self.body)):
+            if (x,y) == self.body[i]:
+                 return True
         pass
     
     def coyote_time(self):
         # TODO: See section 13, "coyote time".
         pass
 
-    def move(self):
+    def move(self, eaten):
         # TODO: See section 1, "Move the snake!". You will be revisiting this section a few times.
+        if eaten:
+            self.body.insert(0, tuple(map(lambda x, y: x + y, self.body[0], DIR[self.direction])))
+            self.l+=1
+        else:
+            for i in range(len(self.body)-1,0,-1):
+                self.body[i] = self.body[i-1]
+            self.body[0] = tuple(map(lambda x, y: x + y, self.body[0], DIR[self.direction]))
+        if self.collision(self.get_head()[0], self.get_head()[1]):
+            self.kill()
+        
         pass
 
     def kill(self):
@@ -97,6 +117,8 @@ class Apple(object):
 
     def place(self, snake):
         # TODO: see section 6, "moving the apple".
+        while self.position in snake:
+            self.position = (rand_int(23), rand_int(23))
         pass
 
     def draw(self, surface):
@@ -126,18 +148,29 @@ def main():
 
     score = 0
 
+    font = pygame.font.Font('freesansbold.ttf', 32) 
+    text = font.render('Score: ' + str(score), True, white)
+    textRect = text.get_rect()
+    textRect.topleft = (20, 20) 
+
     while True:
         # TODO: see section 10, "incremental difficulty".
         clock.tick(10)
         snake.check_events()
         draw_grid(surface)        
-        snake.move()
+        snake.move(False)
 
         snake.draw(surface)
         apple.draw(surface)
         # TODO: see section 5, "Eating the Apple".
+        if snake.get_head() == apple.position:
+            apple.place(snake.body)
+            snake.move(True)
+            score+=1
         screen.blit(surface, (0,0))
         # TODO: see section 8, "Display the Score"
+        text = font.render('Score: ' + str(score), True, white)
+        screen.blit(text, textRect)
 
         pygame.display.update()
         if snake.dead:
