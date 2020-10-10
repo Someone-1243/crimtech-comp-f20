@@ -18,7 +18,7 @@ C. Welcome to Programming in Javascript
 
 4. The function square, which takes a variable i and returns i * i returns NaN when given square("hello"), and it returns 6.25 when given square(2.5)
 
-6. Function (for self)
+6. Function  
 function numberString (i) {
     var s = " ";    
     if (typeof i == "number"){
