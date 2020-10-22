@@ -19,7 +19,64 @@ let std_quotes = ["Patience you must have, my young padawan.",
 "Difficult to see. Always in motion is the future."
 ];
 
+window.onload = function(){
+    var input_field = document.getElementById("input_field")
+    input_field.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault()
+            document.getElementById("btn").onclick()
+        }
+    })
+}
+
+
 function respond() {
     // Your Code Here
-    console.log("Hello World!");
+    let input = document.getElementById("input_field").value
+    let image_path = "img/"
+    let quote 
+    let baby
+
+    if (input.includes('baby') || input.includes('cute')) {
+        image_path = image_path.concat([names[0]])
+        baby = true
+    }
+    else {
+        image_path = image_path.concat([names[1]])
+        baby = false
+    }
+
+    image_path = image_path.concat('-')
+
+    if (input.includes("force") && input.includes('dark')) {
+        image_path = image_path.concat(moods[0])
+        if (!baby)
+            quote = dark_quotes[Math.floor(Math.random() * 5)]
+    }
+    else if (input.includes('force')) {
+        image_path = image_path.concat(moods[1])
+        if (!baby)
+            quote = force_quotes[Math.floor(Math.random() * 5)]
+    }
+
+    else {
+        image_path = image_path.concat(moods[2])
+        if (!baby)
+            quote = std_quotes[Math.floor(Math.random() * 5)]
+    }
+
+    if (baby)
+        quote = "Yes, h"
+    else
+        quote = quote.concat(" H")
+    for (let i = 0, x = Math.floor(Math.random() * 10 + 4); i < x; i++)
+        quote = quote.concat("m")
+
+    image_path = image_path.concat('.jpg')
+
+    document.getElementById('yoda_img').setAttribute('src',image_path)
+    document.getElementById('paragraph').innerHTML = quote
+
+    document.getElementById("input_field").value = ""
 }
+
