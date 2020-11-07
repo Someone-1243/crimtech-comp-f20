@@ -24,7 +24,7 @@ class Panel extends React.Component {
   end_count() {
     // TODO: Your code here!
       if (window.performance.now() > this.state.true_duration) {
-          this.setState({ ran_once: true });
+          this.setState({ ran_once: true});
           this.setState({ counting: false });
           this.setState({ reaction_time: window.performance.now() - this.state.true_duration });
       }
