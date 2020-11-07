@@ -9,16 +9,18 @@ class Panel extends React.Component {
     this.process_click = this.process_click.bind(this);
   }
     handle_color = (duration) => {
-
-        setTimeout(this.setState({ color: 'green' }), duration);
-     
+        setTimeout(function () {
+            this.setState({ color: 'green' });
+        }
+            .bind(this), duration);
   }
   start_count() {
       this.setState({ start_time: window.performance.now() }); 
       let duration = (Math.random() * 2 + 5) * 1000 + this.state.start_time;
-      this.setState({ true_duration: duration}, this.handle_color(duration));
+      this.setState({ true_duration: duration});
       this.setState({ color: 'darkred' });
       this.setState({ counting: true });
+      this.handle_color(duration);
 
   }
   end_count() {
